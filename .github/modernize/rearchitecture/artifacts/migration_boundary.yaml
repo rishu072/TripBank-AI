@@ -1,0 +1,17 @@
+user_intent:
+  raw_request: "Analyze this project and explain how to run it."
+  inferred_acceptance: ["document current runtime boundary and startup commands", "preserve existing behavior"]
+  cleanup_required: false
+strategy: minimal_runtime
+runtime_reachable:
+  - backend/app/main.py
+  - frontend/index.html
+  - frontend/src/main.jsx
+must_rewrite: []
+copy_as_is:
+  - backend/app
+  - frontend/src
+legacy_allowed_to_remain: []
+defer_cleanup: []
+full_rewrite_reason: null
+implementation_rule: "This is an analysis-only boundary; no implementation rewrite is requested."

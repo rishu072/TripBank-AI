@@ -1,0 +1,33 @@
+contracts:
+  - name: protected-rest-api
+    unit: global
+    type: rest
+    stability: frozen
+    source_loc: "backend/app/main.py:50"
+    contract:
+      method: "HTTP"
+      path: "/api/v1/*"
+      request: "Pydantic request schemas"
+      response: "JSON success payloads or {error:{code,message,fields?}}"
+      error: "422 validation, domain-specific 4xx, 500 INTERNAL_ERROR"
+      auth: "Bearer JWT for protected routes"
+    target_contract:
+      method: "HTTP REST"
+      notes: "Preserve the /api/v1 prefix, bearer auth, JSON shapes, and stable error codes."
+    semantic_divergence: []
+  - name: paypal-orders
+    unit: payments-webhooks
+    type: sdk
+    stability: frozen
+    source_loc: "backend/app/services/paypal.py:25"
+    contract:
+      method: "PayPal Orders API"
+      path: "/v2/checkout/orders and /v2/checkout/orders/{id}/capture"
+      request: "CAPTURE order with amount/currency and optional merchant payee"
+      response: "Provider order/capture payload"
+      error: "Mapped to PAYPAL_NOT_CONFIGURED, PROVIDER_ERROR, ORDER_NOT_APPROVED, ORDER_ALREADY_CAPTURED"
+      auth: "PayPal OAuth client credentials"
+    target_contract:
+      method: "PayPal Sandbox Orders API"
+      notes: "Verify status, exact amount/currency, order id, and payee before ledger posting."
+    semantic_divergence: []
