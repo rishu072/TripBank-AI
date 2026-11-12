@@ -1,4 +1,4 @@
-# SplitWise AI – TripBank (MVP)
+# SplitWise AI – TripBank
 
 Group travel finance workspace: organizer creates a trip, members join by invite, AI drafts a budget, members contribute through **PayPal Sandbox**, the backend verifies each capture and posts it once to an append-only ledger, and everyone sees the same dashboard, expenses and statement.
 
