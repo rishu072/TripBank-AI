@@ -1,0 +1,7 @@
+unit: frontend-spa
+bindings:
+  - {type: route-declaration, name: "React Router route tree", source_loc: "frontend/src/App.jsx:20", target: "Routes and ProtectedRoute", must_appear_in_target: true, notes: "Public auth routes and protected /app routes."}
+  - {type: route-declaration, name: "Vite entrypoint", source_loc: "frontend/src/main.jsx:1", target: "React root", must_appear_in_target: true, notes: "Bootstraps the SPA."}
+runtime_config:
+  - {key: VITE_API_BASE_URL, source_loc: "frontend/src/api.js:3", source: env, default_value: "http://localhost:8000/api/v1", must_appear_in_target: true, notes: "Backend API base URL."}
+  - {key: VITE_PAYPAL_CLIENT_ID, source_loc: "frontend/src/pages/TripFund.jsx:1", source: env, default_value: "", must_appear_in_target: true, notes: "Public PayPal JS SDK client id."}

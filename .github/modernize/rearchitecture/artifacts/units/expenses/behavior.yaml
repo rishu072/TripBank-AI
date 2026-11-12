@@ -1,0 +1,9 @@
+unit: expenses
+side_effects:
+  - {source_loc: "backend/app/routers/expenses.py:32", effect: "Creates draft expense and audit event.", must_preserve: true}
+  - {source_loc: "backend/app/routers/expenses.py:68", effect: "Approves expense and posts ledger entry.", must_preserve: true}
+branches:
+  - {source_loc: "backend/app/routers/expenses.py:68", condition: "Expense is not a draft or approver lacks organizer role", behavior: "Reject approval.", must_preserve: true}
+error_paths:
+  - {source_loc: "backend/app/routers/expenses.py:53", trigger: "Expense not found or immutable state", outcome: "Return domain error.", contract: "HTTP 4xx error envelope.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/routers/expenses.py:68", scope: "Expense approval and ledger posting use separate writes with idempotent ledger index.", isolation: "MongoDB default", must_preserve: true}}

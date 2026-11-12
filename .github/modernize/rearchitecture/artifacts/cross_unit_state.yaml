@@ -1,0 +1,21 @@
+flows:
+  - name: bearer-token-to-api
+    medium: http-header
+    key: Authorization
+    writer: {unit: auth, source_loc: "backend/app/routers/auth.py:44"}
+    reader: {unit: users, source_loc: "backend/app/deps.py:1"}
+    pairing: matched
+    must_preserve: true
+    must_confirm: null
+    verification_hint: "Login, then call a protected endpoint with the returned token."
+    notes: "Frontend persists the token and Axios attaches it to requests."
+  - name: frontend-token-storage
+    medium: cookie
+    key: tb_token
+    writer: {unit: frontend-spa, source_loc: "frontend/src/auth.jsx:1"}
+    reader: {unit: frontend-spa, source_loc: "frontend/src/api.js:5"}
+    pairing: matched
+    must_preserve: true
+    must_confirm: null
+    verification_hint: "Refresh a protected page after login and confirm the session remains."
+    notes: "The implementation uses localStorage despite this artifact's cookie vocabulary; key is the contract."

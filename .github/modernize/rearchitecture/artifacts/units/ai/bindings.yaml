@@ -1,0 +1,6 @@
+unit: ai
+bindings:
+  - {type: route-declaration, name: "/ai/*", source_loc: "backend/app/routers/ai.py:14", target: "FastAPI router", must_appear_in_target: true, notes: "Trip-scoped routes require membership."}
+runtime_config:
+  - {key: GEMINI_API_KEY, source_loc: "backend/app/config.py:8", source: env, default_value: "", must_appear_in_target: true, notes: "Optional provider key; empty enables fallback."}
+  - {key: GEMINI_MODEL, source_loc: "backend/app/config.py:9", source: env, default_value: "gemini-2.5-flash", must_appear_in_target: true, notes: "Provider model name."}

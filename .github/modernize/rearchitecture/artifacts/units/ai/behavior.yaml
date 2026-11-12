@@ -1,0 +1,9 @@
+unit: ai
+side_effects:
+  - {source_loc: "backend/app/routers/ai.py:28", effect: "Generates a validated budget plan, using Gemini or rule-based fallback.", must_preserve: true}
+  - {source_loc: "backend/app/routers/ai.py:80", effect: "Reads and stores trip insights/report state.", must_preserve: true}
+branches:
+  - {source_loc: "backend/app/services/gemini.py:1", condition: "Gemini API key absent or provider fails", behavior: "Use deterministic local fallback.", must_preserve: true}
+error_paths:
+  - {source_loc: "backend/app/routers/ai.py:28", trigger: "Invalid generated plan", outcome: "Reject rather than save invalid amounts.", contract: "HTTP 4xx error envelope.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/routers/ai.py:80", scope: "Insight reads/writes are individual MongoDB operations.", isolation: "MongoDB default", must_preserve: true}}

@@ -1,0 +1,4 @@
+unit: expenses
+bindings:
+  - {type: route-declaration, name: "/trips/{trip_id}/expenses", source_loc: "backend/app/routers/expenses.py:17", target: "FastAPI router", must_appear_in_target: true, notes: "Member read and organizer approval authorization."}
+runtime_config: []

@@ -1,0 +1,5 @@
+unit: statements-uploads
+bindings:
+  - {type: route-declaration, name: "/trips/{trip_id}/statement and /uploads/signature", source_loc: "backend/app/routers/statements.py:12", target: "FastAPI routers", must_appear_in_target: true, notes: "Trip member access required."}
+runtime_config:
+  - {key: CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET, source_loc: "backend/app/config.py:15-17", source: env, default_value: "", must_appear_in_target: true, notes: "Optional receipt storage integration."}

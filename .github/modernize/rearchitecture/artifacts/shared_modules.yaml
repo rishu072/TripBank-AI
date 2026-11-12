@@ -1,0 +1,48 @@
+modules:
+  - name: config
+    kind: config
+    source_loc: "backend/app/config.py:4"
+    used_by_units: [auth, ai]
+    fields:
+      - {name: app_env, type: str}
+      - {name: frontend_origin, type: str}
+      - {name: gemini_api_key, type: str}
+      - {name: gemini_model, type: str}
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Central environment-backed settings object."
+  - name: auth-context
+    kind: utility
+    source_loc: "backend/app/deps.py:1"
+    used_by_units: [users]
+    fields: [{name: current_user, type: callable}]
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Bearer-token dependency used to resolve the current user."
+  - name: ledger
+    kind: store
+    source_loc: "backend/app/services/ledger.py:1"
+    used_by_units: [trips, payments-webhooks, expenses, statements-uploads]
+    fields:
+      - {name: post, type: callable}
+      - {name: summary, type: callable}
+      - {name: paid_map, type: callable}
+      - {name: member_rows, type: callable}
+      - {name: category_spend, type: callable}
+    god_class: false
+    split_candidate: false
+    migration_strategy: wrap
+    notes: "Shared append-only ledger calculations and projections."
+  - name: frontend-api
+    kind: utility
+    source_loc: "frontend/src/api.js:3"
+    used_by_units: [frontend-spa]
+    fields:
+      - {name: api, type: AxiosInstance}
+      - {name: errOf, type: function}
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Shared HTTP client and normalized error extraction."

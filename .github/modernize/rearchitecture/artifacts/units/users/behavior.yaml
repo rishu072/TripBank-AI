@@ -1,0 +1,7 @@
+unit: users
+side_effects:
+  - {source_loc: "backend/app/routers/users.py:21", effect: "Updates authenticated user profile and security settings.", must_preserve: true}
+branches: []
+error_paths:
+  - {source_loc: "backend/app/routers/users.py:16", trigger: "Missing/invalid bearer token", outcome: "Reject protected request.", contract: "HTTP 401 error envelope.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/routers/users.py:21", scope: "Individual user update.", isolation: "MongoDB default", must_preserve: true}}

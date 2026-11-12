@@ -1,0 +1,4 @@
+unit: payments-webhooks
+commit: false
+candidate_splits:
+  - {id: "backend/app/routers/webhooks.py:60-120", drivers: [protocol_split, execution_model_split], rationale: "Provider callback verification and reconciliation are externally triggered by PayPal and have different retry/idempotency behavior from buyer capture.", source_slice: {file: "backend/app/routers/webhooks.py", lines: [60, 120]}}

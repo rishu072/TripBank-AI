@@ -1,0 +1,65 @@
+units:
+  - name: auth
+    trigger: route
+    trigger_detail: "POST /api/v1/auth/{register,login,forgot-password,reset-password}"
+    source_anchors: [{path: backend/app/routers/auth.py, line: 31}]
+    exported_signature: [{method: "HTTP auth request/response contracts", source_loc: "backend/app/routers/auth.py:31", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs: [{module: config, used_fields: [app_env, frontend_origin]}]
+  - name: users
+    trigger: route
+    trigger_detail: "GET/PATCH /api/v1/users/me and GET /api/v1/users/me/dashboard"
+    source_anchors: [{path: backend/app/routers/users.py, line: 16}]
+    exported_signature: [{method: "HTTP user profile/dashboard contracts", source_loc: "backend/app/routers/users.py:16", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs: [{module: auth-context, used_fields: [current_user]}]
+  - name: trips
+    trigger: route
+    trigger_detail: "Trip CRUD, join, invites, members, budget, fund, close"
+    source_anchors: [{path: backend/app/routers/trips.py, line: 49}]
+    exported_signature: [{method: "HTTP trip lifecycle contracts", source_loc: "backend/app/routers/trips.py:49", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: [{unit: auth, via: "Bearer token"}]
+    shared_refs: [{module: ledger, used_fields: [summary, paid_map, member_rows]}]
+  - name: payments-webhooks
+    trigger: route
+    trigger_detail: "POST /api/v1/trips/{trip_id}/payment-orders, POST /api/v1/payments/{order_id}/capture, POST /api/v1/webhooks/paypal"
+    source_anchors: [{path: backend/app/routers/payments.py, line: 19}, {path: backend/app/routers/webhooks.py, line: 60}]
+    exported_signature: [{method: "HTTP payment capture and webhook contracts", source_loc: "backend/app/routers/payments.py:19", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: [{unit: trips, via: "trip membership and ledger"}]
+    shared_refs: [{module: ledger, used_fields: [post, summary]}]
+  - name: expenses
+    trigger: route
+    trigger_detail: "POST/GET/PATCH /api/v1/trips/{trip_id}/expenses"
+    source_anchors: [{path: backend/app/routers/expenses.py, line: 32}]
+    exported_signature: [{method: "HTTP expense and approval contracts", source_loc: "backend/app/routers/expenses.py:32", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: [{unit: trips, via: "trip membership"}]
+    shared_refs: [{module: ledger, used_fields: [post, category_spend]}]
+  - name: ai
+    trigger: route
+    trigger_detail: "POST /api/v1/ai/budget-plan, trip AI ask/insights/report"
+    source_anchors: [{path: backend/app/routers/ai.py, line: 28}]
+    exported_signature: [{method: "HTTP AI budget and insight contracts", source_loc: "backend/app/routers/ai.py:28", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: [{unit: trips, via: "trip context"}]
+    shared_refs: [{module: config, used_fields: [gemini_api_key, gemini_model]}]
+  - name: statements-uploads
+    trigger: route
+    trigger_detail: "GET /api/v1/trips/{trip_id}/statement and POST /api/v1/trips/{trip_id}/uploads/signature"
+    source_anchors: [{path: backend/app/routers/statements.py, line: 12}, {path: backend/app/routers/uploads.py, line: 13}]
+    exported_signature: [{method: "HTTP statement and upload-signature contracts", source_loc: "backend/app/routers/statements.py:12", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: [{unit: trips, via: "trip membership"}]
+    shared_refs: [{module: ledger, used_fields: [summary, category_spend]}]
+  - name: frontend-spa
+    trigger: page
+    trigger_detail: "React routes declared in frontend/src/App.jsx"
+    source_anchors: [{path: frontend/src/App.jsx, line: 20}]
+    exported_signature: [{method: "Browser route and API client behavior", source_loc: "frontend/src/App.jsx:20", stability: frozen}]
+    dynamic_entrypoints: []
+    depends_on: [{unit: auth, via: "HTTP API"}, {unit: trips, via: "HTTP API"}, {unit: payments-webhooks, via: "HTTP API"}, {unit: expenses, via: "HTTP API"}, {unit: ai, via: "HTTP API"}]
+    shared_refs: [{module: frontend-api, used_fields: [api, errOf]}]
