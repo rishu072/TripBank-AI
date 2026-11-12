@@ -1,0 +1,4 @@
+unit: trips
+bindings:
+  - {type: route-declaration, name: "/trips/*", source_loc: "backend/app/routers/trips.py:17", target: "FastAPI router", must_appear_in_target: true, notes: "Uses member and organizer dependencies."}
+runtime_config: []

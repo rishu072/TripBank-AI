@@ -1,0 +1,4 @@
+unit: auth
+commit: false
+candidate_splits:
+  - {id: "backend/app/routers/auth.py:60-89", drivers: [concern_split], rationale: "Password reset has a separate token lifecycle and could be isolated from registration and login without changing the public routes.", source_slice: {file: "backend/app/routers/auth.py", lines: [60, 89]}}

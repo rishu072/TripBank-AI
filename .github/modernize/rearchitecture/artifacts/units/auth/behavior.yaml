@@ -1,0 +1,9 @@
+unit: auth
+side_effects:
+  - {source_loc: "backend/app/routers/auth.py:31", effect: "Creates user record and returns JWT on registration.", must_preserve: true}
+  - {source_loc: "backend/app/routers/auth.py:80", effect: "Stores hashed password-reset token with expiry.", must_preserve: true}
+branches:
+  - {source_loc: "backend/app/routers/auth.py:51", condition: "User missing or password invalid", behavior: "Return INVALID_CREDENTIALS with HTTP 401.", must_preserve: true}
+error_paths:
+  - {source_loc: "backend/app/routers/auth.py:39", trigger: "Duplicate normalized email", outcome: "Return EMAIL_TAKEN.", contract: "HTTP 409 and error envelope.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/routers/auth.py:31", scope: "Individual MongoDB writes.", isolation: "MongoDB default", must_preserve: true}}

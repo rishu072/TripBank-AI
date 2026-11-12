@@ -1,0 +1,4 @@
+unit: frontend-spa
+commit: false
+candidate_splits:
+  - {id: "frontend/src/pages/TripLayout.jsx:1-120", drivers: [concern_split, reuse_split], rationale: "Trip navigation shell and trip financial pages are separate UI concerns with distinct loading and data contracts.", source_slice: {file: "frontend/src/pages/TripLayout.jsx", lines: [1, 120]}}

@@ -1,0 +1,10 @@
+unit: trips
+side_effects:
+  - {source_loc: "backend/app/routers/trips.py:49", effect: "Creates trip, organizer membership, invite, and audit event.", must_preserve: true}
+  - {source_loc: "backend/app/routers/trips.py:164", effect: "Stores approved budget history and audit event.", must_preserve: true}
+branches:
+  - {source_loc: "backend/app/routers/trips.py:74", condition: "Invite missing, expired, revoked, full, inactive, or duplicate membership", behavior: "Return stable domain error code.", must_preserve: true}
+  - {source_loc: "backend/app/routers/trips.py:197", condition: "Captured orders or draft expenses exist", behavior: "Block trip close with OUTSTANDING_ITEMS.", must_preserve: true}
+error_paths:
+  - {source_loc: "backend/app/routers/trips.py:164", trigger: "Budget categories do not equal total", outcome: "Reject budget.", contract: "HTTP 422 BUDGET_TOTAL_MISMATCH.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/routers/trips.py:49", scope: "Trip and membership writes are separate MongoDB operations.", isolation: "MongoDB default", must_preserve: true}}

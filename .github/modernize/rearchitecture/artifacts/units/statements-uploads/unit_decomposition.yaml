@@ -1,0 +1,4 @@
+unit: statements-uploads
+commit: false
+candidate_splits:
+  - {id: "backend/app/routers/uploads.py:13-35", drivers: [protocol_split], rationale: "Signed external storage uploads have a provider contract distinct from read-only financial statement projection.", source_slice: {file: "backend/app/routers/uploads.py", lines: [13, 35]}}

@@ -1,0 +1,6 @@
+unit: payments-webhooks
+bindings:
+  - {type: route-declaration, name: "/payments/* and /webhooks/paypal", source_loc: "backend/app/routers/payments.py:15", target: "FastAPI routers", must_appear_in_target: true, notes: "PayPal webhook is public provider callback with signature verification."}
+runtime_config:
+  - {key: PAYPAL_BASE_URL, source_loc: "backend/app/config.py:11", source: env, default_value: "https://api-m.sandbox.paypal.com", must_appear_in_target: true, notes: "Sandbox provider endpoint."}
+  - {key: PAYPAL_CLIENT_ID/PAYPAL_CLIENT_SECRET, source_loc: "backend/app/config.py:9-10", source: env, default_value: "", must_appear_in_target: true, notes: "OAuth credentials."}

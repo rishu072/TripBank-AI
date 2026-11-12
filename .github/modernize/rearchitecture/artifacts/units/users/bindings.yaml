@@ -1,0 +1,4 @@
+unit: users
+bindings:
+  - {type: route-declaration, name: "/users/me", source_loc: "backend/app/routers/users.py:16", target: "FastAPI router", must_appear_in_target: true, notes: "Protected by current_user dependency."}
+runtime_config: []

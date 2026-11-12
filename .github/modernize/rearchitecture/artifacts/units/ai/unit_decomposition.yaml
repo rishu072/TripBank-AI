@@ -1,0 +1,4 @@
+unit: ai
+commit: false
+candidate_splits:
+  - {id: "backend/app/routers/ai.py:63-90", drivers: [concern_split, protocol_split], rationale: "Budget generation, conversational questions, and persisted insights use separate contracts and provider paths.", source_slice: {file: "backend/app/routers/ai.py", lines: [63, 90]}}

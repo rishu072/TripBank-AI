@@ -1,0 +1,9 @@
+unit: payments-webhooks
+side_effects:
+  - {source_loc: "backend/app/services/payments.py:1", effect: "Verifies provider capture and posts idempotent contribution ledger entries.", must_preserve: true}
+  - {source_loc: "backend/app/routers/webhooks.py:60", effect: "Records webhook event ids and reconciles late or reversal events.", must_preserve: true}
+branches:
+  - {source_loc: "backend/app/services/payments.py:1", condition: "Status, amount, currency, order id, or payee mismatch", behavior: "Reject capture without crediting ledger.", must_preserve: true}
+error_paths:
+  - {source_loc: "backend/app/services/paypal.py:25", trigger: "Provider unavailable or invalid order state", outcome: "Return mapped provider/domain error.", contract: "Stable error code and HTTP status.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/services/ledger.py:6", scope: "Unique ledger indexes make repeated posting idempotent.", isolation: "MongoDB unique indexes", must_preserve: true}}

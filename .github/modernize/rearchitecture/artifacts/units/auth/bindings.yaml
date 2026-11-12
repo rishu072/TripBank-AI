@@ -1,0 +1,6 @@
+unit: auth
+bindings:
+  - {type: route-declaration, name: "/auth/*", source_loc: "backend/app/routers/auth.py:18", target: "FastAPI router", must_appear_in_target: true, notes: "Mounted below /api/v1."}
+runtime_config:
+  - {key: JWT_SECRET, source_loc: "backend/app/config.py:7", source: env, default_value: "change-me", must_appear_in_target: true, notes: "JWT signing secret."}
+  - {key: FRONTEND_ORIGIN, source_loc: "backend/app/config.py:6", source: env, default_value: "http://localhost:5173", must_appear_in_target: true, notes: "Reset-link origin and CORS."}

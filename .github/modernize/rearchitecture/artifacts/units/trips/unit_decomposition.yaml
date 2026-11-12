@@ -1,0 +1,4 @@
+unit: trips
+commit: false
+candidate_splits:
+  - {id: "backend/app/routers/trips.py:119-161", drivers: [concern_split, lifecycle_split], rationale: "Invite and membership administration has distinct authorization and lifecycle rules from trip creation and budget management.", source_slice: {file: "backend/app/routers/trips.py", lines: [119, 161]}}

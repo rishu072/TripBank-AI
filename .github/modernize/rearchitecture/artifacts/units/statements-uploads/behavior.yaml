@@ -1,0 +1,7 @@
+unit: statements-uploads
+side_effects:
+  - {source_loc: "backend/app/routers/uploads.py:13", effect: "Creates a signed Cloudinary upload signature when configured.", must_preserve: true}
+branches: []
+error_paths:
+  - {source_loc: "backend/app/routers/uploads.py:13", trigger: "Cloudinary not configured", outcome: "Return configuration error.", contract: "HTTP 503 error envelope.", must_preserve: true}
+concurrency: {model: sync, tx_boundary: {source_loc: "backend/app/routers/statements.py:12", scope: "Read-only ledger/expense projections.", isolation: "MongoDB default", must_preserve: true}}

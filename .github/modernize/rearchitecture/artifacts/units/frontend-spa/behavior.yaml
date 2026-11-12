@@ -1,0 +1,9 @@
+unit: frontend-spa
+side_effects:
+  - {source_loc: "frontend/src/api.js:3", effect: "Attaches localStorage JWT to API requests and redirects on unauthorized responses.", must_preserve: true}
+  - {source_loc: "frontend/src/App.jsx:20", effect: "Routes authenticated users through ProtectedRoute and shared Layout.", must_preserve: true}
+branches:
+  - {source_loc: "frontend/src/App.jsx:20", condition: "Unauthenticated /app navigation", behavior: "ProtectedRoute redirects to login.", must_preserve: true}
+error_paths:
+  - {source_loc: "frontend/src/api.js:14", trigger: "HTTP 401 from protected API", outcome: "Clear token and navigate to /login.", contract: "Browser navigation behavior.", must_preserve: true}
+concurrency: {model: event-loop, tx_boundary: {source_loc: "frontend/src/api.js:3", scope: "Axios request/response interceptor lifecycle.", isolation: "Browser event loop", must_preserve: true}}
